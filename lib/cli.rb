@@ -12,6 +12,6 @@ class CLI
   #second scrape
 
   def run
-    
+    #test 2
   end
 end
