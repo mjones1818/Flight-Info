@@ -90,7 +90,8 @@ class Cli
         fourth = Api.new
         fourth.airport_activity(input)
         Flights.all.each_with_index do |flight, index|
-          puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}"
+          puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}--------------------------#{flight.flight_summary}"
+          #puts "------#{flight.flight_summary}"
         end
         show_flight_information
       end

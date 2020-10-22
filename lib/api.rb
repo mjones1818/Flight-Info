@@ -27,7 +27,6 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
-    binding.pry
 
     flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
     if flight_data.length < 2
@@ -68,20 +67,24 @@ class Api
         split = data.split(" | ")
         arrived_flights_array << split[0]
         Flights.make_flights(arrived_flights_array)
+        arrived_flights_array.clear
         flight_number = get_flight_number(split[0])
         flight_info_hash["flight_summary"] = split[1]
-        binding.pry
         Flights.add_flight_info(flight_number,flight_info_hash)
-        
       else
         next
       end
     end
-
+    
     enroute_flights.each do |data|
       if data.include? "|"
         split = data.split(" | ")
         enroute_flights_array << split[0]
+        Flights.make_flights(enroute_flights_array)
+        enroute_flights_array.clear
+        flight_number = get_flight_number(split[0])
+        flight_info_hash["flight_summary"] = split[1]
+        Flights.add_flight_info(flight_number,flight_info_hash)
       else
         next
       end
@@ -90,14 +93,16 @@ class Api
     scheduled_flights.each do |data|
       if data.include? "|"
         split = data.split(" | ")
-        arrived_flights_array << split[0]
+        scheduled_flights_array << split[0]
+        Flights.make_flights(scheduled_flights_array)
+        scheduled_flights_array.clear
+        flight_number = get_flight_number(split[0])
+        flight_info_hash["flight_summary"] = split[1]
+        Flights.add_flight_info(flight_number,flight_info_hash)
       else
         next
       end
     end
-    Flights.make_flights(arrived_flights_array)
-    Flights.make_flights(enroute_flights_array)
-    Flights.make_flights(arrived_flights_array)
   end 
 
   def get_flight_number(flight)
@@ -112,8 +117,4 @@ class Api
 
   end
 end
-
-# arrived_flights = flights["queryresult"]["pods"][0]["subpods"][0]["img"]["alt"]
-# enroute_flights = flights["queryresult"]["pods"][1]["subpods"][0]["img"]["alt"]
-# scheduled_flights = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"]
 
