@@ -15,6 +15,14 @@ class Flights
     @@all.clear
   end
 
+  def self.find_or_create_by(flight_number,airline)
+    if self.find_flight(flight_number) == nil
+      self.new(flight_number, airline)
+    else
+      self.find_flight(flight_number)
+    end
+  end
+
   def self.find_flight(number)
     self.all.find {|flight| flight.flight_number == number}
   end
@@ -52,7 +60,7 @@ class Flights
         airline = flight.scan(/\D/).join.chomp(" flight ")
       end
       new_airline = Airlines.find_or_create_by(airline)
-      Flights.new(flight_number, new_airline)
+      Flights.find_or_create_by(flight_number, new_airline)
     end
   end
 end
