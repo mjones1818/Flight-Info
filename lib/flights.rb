@@ -41,4 +41,18 @@ class Flights
     end
     
   end
+
+  def self.make_flights(flights)
+    flights.each do |flight|
+      if flight.match(/\D\d+\D+/)
+        flight_number = flight
+        airline = "Private "
+      else
+        flight_number = flight.scan(/\d/).join
+        airline = flight.scan(/\D/).join.chomp(" flight ")
+      end
+      new_airline = Airlines.find_or_create_by(airline)
+      Flights.new(flight_number, new_airline)
+    end
+  end
 end

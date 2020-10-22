@@ -18,22 +18,8 @@ class Api
       end
     end
     final.delete(nil)
-    make_flights(final.uniq)
+    Flights.make_flights(final.uniq)
     final.uniq
-  end
-
-  def make_flights(flights)
-    flights.each do |flight|
-      if flight.match(/\D\d+\D+/)
-        flight_number = flight
-        airline = "Private "
-      else
-        flight_number = flight.scan(/\d/).join
-        airline = flight.scan(/\D/).join.chomp(" flight ")
-      end
-      new_airline = Airlines.find_or_create_by(airline)
-      Flights.new(flight_number, new_airline)
-    end
   end
 
   def flight_info(flight_number, airline)
@@ -41,7 +27,9 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
-    flight_data = flights["queryresult"]["pods"][3]["subpods"][0]["img"]["alt"].split("\n")
+    binding.pry
+
+    flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
     if flight_data.length < 2
       flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
     end
@@ -74,10 +62,17 @@ class Api
     arrived_flights_array = []
     enroute_flights_array = []
     scheduled_flights_array = []
+    flight_info_hash = {}
     arrived_flights.each do |data|
       if data.include? "|"
         split = data.split(" | ")
         arrived_flights_array << split[0]
+        Flights.make_flights(arrived_flights_array)
+        flight_number = get_flight_number(split[0])
+        flight_info_hash["flight_summary"] = split[1]
+        binding.pry
+        Flights.add_flight_info(flight_number,flight_info_hash)
+        
       else
         next
       end
@@ -100,10 +95,22 @@ class Api
         next
       end
     end
-    self.make_flights(arrived_flights_array)
-    self.make_flights(enroute_flights_array)
-    self.make_flights(arrived_flights_array)
+    Flights.make_flights(arrived_flights_array)
+    Flights.make_flights(enroute_flights_array)
+    Flights.make_flights(arrived_flights_array)
   end 
+
+  def get_flight_number(flight)
+    if flight.match(/\D\d+\D+/)
+      flight_number = flight
+      airline = "Private "
+    else
+      flight_number = flight.scan(/\d/).join
+      airline = flight.scan(/\D/).join.chomp(" flight ")
+    end
+    flight_number
+
+  end
 end
 
 # arrived_flights = flights["queryresult"]["pods"][0]["subpods"][0]["img"]["alt"]
