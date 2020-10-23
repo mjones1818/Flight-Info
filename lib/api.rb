@@ -10,7 +10,6 @@ class Api
     all_flights =flights["queryresult"]["pods"][1]["subpods"][0]["img"]["alt"].split("|").drop(2)
     flight_results = all_flights.select {|item| item.include?("(")== false && item.include?("\n")}
     final = flight_results.map do |flight|
-      
       if flight.split("\n")[1].strip == ""
         next
       else
@@ -27,11 +26,7 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
-
     flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
-    if flight_data.length < 2
-      flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
-    end
     flight_info_hash = {}
     flight_data.each do |data|
       if data.include? "|"
