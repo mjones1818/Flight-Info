@@ -26,7 +26,14 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
-    flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
+    begin
+      flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
+    rescue
+      puts "Unable to retrieve flight information about this flight. Please start over"
+      sleep(2)
+      Cli.new.run
+    end
+
     flight_info_hash = {}
     flight_data.each do |data|
       if data.include? "|"

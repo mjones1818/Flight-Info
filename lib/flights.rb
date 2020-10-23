@@ -46,6 +46,8 @@ class Flights
         new_data = returned.airline.name
       end
       puts "#{new_var} - #{new_data}"
+      puts ""
+      sleep(0.3)
     end
     
   end
