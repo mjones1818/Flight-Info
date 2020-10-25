@@ -61,6 +61,7 @@ class Api
     else
       airport = airport + "+airport"
     end
+    
     # URL is the base. APPID is my developer API key. Airport is string with + between. Includepod specifies which pod. shortens response
     #5@ pushes the "more" button 5 times to resturn all results. increase all the timeouts so it has time to return
     custom_url = "#{URL}#{APPID}&input=#{airport}&includepodid=FlightsBetweenSummary:To:FlightData&podstate=5@FlightsBetweenSummary:To:FlightData__More&output=json&Scantimeout=20&parsetimeout=20&formattimeout=20&podtimeout=20"
@@ -72,6 +73,7 @@ class Api
     arrived_flights = flights["queryresult"]["pods"][0]["subpods"][0]["img"]["alt"].split("\n")
     enroute_flights = flights["queryresult"]["pods"][0]["subpods"][1]["img"]["alt"].split("\n")
     scheduled_flights = flights["queryresult"]["pods"][0]["subpods"][2]["img"]["alt"].split("\n")
+    
     #creates arrays and a hash for all the info
     arrived_flights_array = []
     enroute_flights_array = []
