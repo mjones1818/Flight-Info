@@ -6,13 +6,10 @@ Flight info is a command line application to get information about all flights o
 ## Summary
 
   - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installing](#installing)
   - [Deployment](#deployment)
-  - [Built With](#built-with)
-  - [Contributing](#contributing)
-  - [Versioning](#versioning)
-  - [Authors](#authors)
   - [License](#license)
-  - [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
