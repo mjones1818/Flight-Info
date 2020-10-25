@@ -35,7 +35,6 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
-    binding.pry
     begin  #incase there is a bad response from the website the app will restart
       flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
     rescue

@@ -52,8 +52,12 @@ class Cli
         fourth = Api.new
         fourth.airport_activity(input)   #starts second scrape. takes an airport code or ciy as string. 
         Flights.all.each_with_index do |flight, index|  # returns all instances of flights and the summaries
+          #
+          total_characters = (index + 1).to_s.length + flight.airline.name.length + flight.flight_number.length  + 10
+          lines_to_add = 60 - total_characters
+          lines = "-" * lines_to_add
           #binding.pry
-          puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}--------------------#{flight.flight_summary}"
+          puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}#{lines}#{flight.flight_summary}"
         end
         @@flights_overhead = false  #sets menu variable so that show_information can display summaries
         show_flight_information
@@ -92,9 +96,13 @@ class Cli
         matching_airline = Airlines.find_by_name(Airlines.all[input.to_i-1].name) #returns instance of airline
         puts "#{matching_airline.name} Flights:"
         flight_by_airline_array = [] #creates
+        calculate_number_of_lines = ""
         if @@flights_overhead == false #used to determine if flight summary should be displayed. only available from airport activity
           matching_airline.flights.each_with_index do |flight, index| 
-            puts "#{index+1}. #{flight.flight_number}--------------------#{flight.flight_summary}"
+            total_characters = (index + 1).to_s.length + flight.airline.name.length + flight.flight_number.length  + 4
+            lines_to_add = 60 - total_characters
+            lines = "-" * lines_to_add
+            puts "#{index+1}. #{flight.flight_number}#{lines}#{flight.flight_summary}"
             flight_by_airline_array << flight
           end
         else
@@ -125,7 +133,10 @@ class Cli
         #prints out based on what menu
         if @@flights_overhead == false
           Flights.all.each_with_index do |flight, index|
-            puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}--------------------------#{flight.flight_summary}"
+            total_characters = (index + 1).to_s.length + flight.airline.name.length + flight.flight_number.length  + 4
+            lines_to_add = 60 - total_characters
+            lines = "-" * lines_to_add
+            puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}#{lines}#{flight.flight_summary}"
             #puts "------#{flight.flight_summary}"
           end
         elsif @@flights_overhead == true
