@@ -1,6 +1,6 @@
 # Flight Info
 
-Flight info is a command line application to get information about all flights overhead a specific location or all airport activity. The flights overhead function takes either a zipcode or city as an input and returns a list of all flights currently over that location. Flights by airport will show all flights that have recently arrived, are enroute or are scheduled to fly to the specified airport. 
+Flight info is a command line application used to get information about all flights overhead a specific location or all airport activity. The flights overhead function takes either a zipcode or city as an input and returns a list of all flights currently over that location. Flights by airport will show all flights that have recently arrived, are enroute or are scheduled to fly to the specified airport. 
 
 
 ## Summary

@@ -1,6 +1,8 @@
+
 class Flights
   attr_accessor :airline, :flight_number
   @@all = []
+  
   def initialize(flight_number, airline)
     @flight_number =flight_number
     @airline = airline
@@ -27,13 +29,13 @@ class Flights
     self.all.find {|flight| flight.flight_number == number}
   end
 
-  def self.add_flight_info(flight_number,data) #takes in flight number and hash of all data whatever it is and makes accessors and values
-    returned = self.find_flight(flight_number) #uses number to pull up instance of flight
+  def self.add_flight_info(flight_number,data)                #takes in flight number and hash of all data whatever it is and makes accessors and values
+    returned = self.find_flight(flight_number)
+            #uses number to pull up instance of flight
     data.each do |key, value|
-      returned.class.attr_accessor(key) # makes an accessor 
-      returned.send(("#{key}="), value) # adds value to accessor
+      returned.class.attr_accessor(key)                         # makes an accessor 
+      returned.send(("#{key}="), value)                         # adds value to accessor
     end
-    
     returned
   end
 
@@ -63,7 +65,8 @@ class Flights
         airline = flight.scan(/\D/).join.chomp(" flight ") # grabs the airline name and removes "flight"
       end
       new_airline = Airlines.find_or_create_by(airline)         #creates airline instance
-      Flights.find_or_create_by(flight_number, new_airline)     #creates flight instance
+      Flights.find_or_create_by(flight_number, new_airline)   
+    
     end
   end
 end

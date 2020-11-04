@@ -30,10 +30,10 @@ class Cli
       when "1"                        #flights over a location
         puts "Please enter a location. You can use a city name or zip code"
         input = gets.chomp
-        #scrape data
+        #API data
         Flights.reset_all              #clears all data from @@all
         first = Api.new             
-        first.get_flights_overhead(input)    #starts first scrape with location as input
+        first.get_flights_overhead(input)    #starts first API with location as input
 
         #show data (all flights or flights by airline)
         puts ''
@@ -58,6 +58,7 @@ class Cli
           lines_to_add = 60 - total_characters
           lines = "-" * lines_to_add
           puts "#{index+1}. #{flight.airline.name} flight #{flight.flight_number}#{lines}#{flight.flight_summary}"
+          sleep(0.1)
         end
         @@flights_overhead = false  #sets menu variable so that show_information can display summaries
         show_flight_information
@@ -78,7 +79,7 @@ class Cli
       puts "Select a flight for more information or select view by airline. (unable to track private flights)"
       input = gets.chomp
       
-      #second scrape
+      #second API
       if input.to_i.between?(1,Flights.all.count) #if user chooses item from list
         second = Api.new
         selection_flight_number = Flights.all[input.to_i-1].flight_number #changes input to array index by subtracting one. 
@@ -87,6 +88,7 @@ class Cli
         
       #return results
         Flights.print_information(selection_flight_number)
+        
       elsif input == "airline" || input.to_i == view_by_airline  #if user types airline or view by airline number
         puts "Choose airline name. (unable to track private flights)"
           Airlines.all.each_with_index do |airline, index| #prints all airlines

@@ -35,8 +35,12 @@ class Api
     uri = URI.parse(custom_url)
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)
+    
     begin  #incase there is a bad response from the website the app will restart
       flight_data = flights["queryresult"]["pods"][2]["subpods"][0]["img"]["alt"].split("\n")
+      if flight_data.find {|item| item.include?('slant')} != nil
+        flight_data = flights["queryresult"]["pods"][3]["subpods"][0]["img"]["alt"].split("\n")
+      end
     rescue
       puts "Unable to retrieve flight information about this flight. Please start over"
       sleep(2)
@@ -69,7 +73,7 @@ class Api
     response = Net::HTTP.get_response(uri)
     flights = JSON.parse(response.body)  #gets JSON body of response
     
-    #returns in 3 different places in hash. puts the raw text in a variable 
+    #returns in 3 different places in hash. puts the raw text in an array 
     arrived_flights = flights["queryresult"]["pods"][0]["subpods"][0]["img"]["alt"].split("\n")
     enroute_flights = flights["queryresult"]["pods"][0]["subpods"][1]["img"]["alt"].split("\n")
     scheduled_flights = flights["queryresult"]["pods"][0]["subpods"][2]["img"]["alt"].split("\n")
